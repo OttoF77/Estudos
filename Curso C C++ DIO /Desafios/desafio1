@@ -1,0 +1,48 @@
+#include <iostream>
+
+class Conta {
+public:
+    virtual void depositar(double valor) = 0;
+    virtual void sacar(double valor) = 0;
+    virtual double getSaldo() = 0;
+};
+
+class ContaCorrente : public Conta {
+private:
+    double saldo;
+
+public:
+    void depositar(double valor) override {
+        // ... (chamada à função transversal antes de atualizar o saldo)
+        saldo += valor;
+    }
+
+    void sacar(double valor) override {
+        // ... (chamada à função transversal antes de atualizar o saldo)
+        saldo -= valor;
+    }
+
+    double getSaldo() override {
+        return saldo;
+    }
+};
+
+// ... (classes ContaPoupanca e ContaInvestimento com implementações similares)
+
+// Função transversal (simplificada, usando pré-processamento)
+#define VERIFICAR_SALDO(conta, valor) \
+    if ((conta).getSaldo() < valor) { \
+        std::cout << "Saldo insuficiente!" << std::endl; \
+        return; \
+    }
+
+int main() {
+    ContaCorrente conta;
+    conta.depositar(1000);
+    VERIFICAR_SALDO(conta, 500);
+    conta.sacar(500);
+
+    // ... (outras operações)
+
+    return 0;
+}
