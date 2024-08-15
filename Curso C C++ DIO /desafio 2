@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_TRIES 6
+
+void displayWord(char word[], int guessed[]) {
+    for (int i = 0; i < strlen(word); i++) {
+        if (guessed[i]) {
+            printf("%c ", word[i]);
+        } else {
+            printf("_ ");
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    char word[] = "programacao"; // Palavra secreta
+    int wordLength = strlen(word);
+    int guessed[wordLength]; // Letras já acertadas
+    int tries = 0; // Contador de tentativas erradas
+    int correctGuesses = 0; // Contador de letras corretas
+
+    // Inicializa o array guessed com 0, indicando que nenhuma letra foi acertada
+    for (int i = 0; i < wordLength; i++) {
+        guessed[i] = 0;
+    }
+
+    printf("Bem-vindo ao jogo da forca!\n");
+
+    while (tries < MAX_TRIES && correctGuesses < wordLength) {
+        char guess;
+        int correct = 0;
+
+        printf("\nPalavra: ");
+        displayWord(word, guessed);
+        printf("Tentativas restantes: %d\n", MAX_TRIES - tries);
+        printf("Digite uma letra: ");
+        scanf(" %c", &guess);
+        guess = tolower(guess); // Converte para minúscula
+
+        // Verifica se a letra está na palavra
+        for (int i = 0; i < wordLength; i++) {
+            if (word[i] == guess && !guessed[i]) {
+                guessed[i] = 1;
+                correct = 1;
+                correctGuesses++;
+            }
+        }
+
+        if (!correct) {
+            tries++;
+            printf("Letra incorreta!\n");
+        } else {
+            printf("Letra correta!\n");
+        }
+    }
+
+    if (correctGuesses == wordLength) {
+        printf("\nParabéns! Você adivinhou a palavra: %s\n", word);
+    } else {
+        printf("\nVocê perdeu! A palavra era: %s\n", word);
+    }
+
+    return 0;
+}
